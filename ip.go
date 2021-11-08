@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"github.com/ipipdotnet/ipdb-go"
 	"log"
-	"os"
-	"path"
 )
 
 var (
@@ -16,19 +14,24 @@ var (
 func init() {
 	var err error
 	// 项目根目录
-	rootPath, _ := os.Getwd()
-	IP, err = ipdb.NewBaseStation(path.Join(rootPath, "framework/ip/ipipfree.ipdb"))
+	IP, err = ipdb.NewBaseStation("./ipipfree.ipdb")
 	if err != nil {
 		log.Panicf("Load ipdb error: %v", err)
 	}
 }
 
-// FindIp 获取ID地址
-func FindIp(ip string) string {
-	if len(ip) == 0 {
+// FindInfo 获取IP信息
+func FindInfo(addr string, language string) (baseStationInfo *ipdb.BaseStationInfo, err error) {
+	baseStationInfo, err = IP.FindInfo(addr, language)
+	return
+}
+
+// FindIp 获取IP地址
+func FindIp(addr string, language string) string {
+	if len(addr) == 0 {
 		return ""
 	}
-	baseStationInfo, err := IP.FindInfo(ip, Language)
+	baseStationInfo, err := IP.FindInfo(addr, language)
 	if err != nil {
 		return ""
 	}
